@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog Index!{% endblock %}
+
+{% block body %}
+
+    {% for id, post in posts %}
+        <p>
+            <a href="{{ path('blog_show', { id: id }) }}">ID: {{id}} </a>
+        </p>
+        <h3>{{post.title | upper }}</h3>
+        <p>{{ random()|price(5) }} </p>
+
+        <p>{{ post.text}}</p>
+        <p>Created {{ post.date|date('F jS Y H:i')}}</p>
+    {% endfor %}
+    <p>Current locale {{swearwords|join(', ')}}</p>
+    <p>whatsup {{hey}}</p>
+{% endblock %}
