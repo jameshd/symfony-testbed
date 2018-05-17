@@ -5,3 +5,4 @@ twig:
     globals:
       swearwords: ['sh*t', 'tw@t', 'd1ck']
       hey: '%hello_message%'
+    form_themes: ['bootstrap_4_layout.html.twig']

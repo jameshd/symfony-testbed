@@ -3,10 +3,19 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="/build/css/app.css">
+        {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <main role="main" class="container">
+            <div class="my-3 p-3 bg-white rounded box-shadow">
+                <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
+
+                {% block body %}
+                {% endblock %}
+
+            </div>
 
         {% block debug %}
             <ul>
@@ -19,6 +28,8 @@
 
         {% endblock  %}
 
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script src="/build/js/app.js" type="text/javascript" charset="utf-8" async defer></script>
+        {% endblock %}
     </body>
 </html>
