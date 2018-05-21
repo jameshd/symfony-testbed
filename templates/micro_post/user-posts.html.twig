@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} User Posts {% endblock %}
+
+{% block body %}
+
+    <div class="card-group py-2">
+        <div class="card">
+            <div class="card-body">
+                <h5>{{ user.fullName }}<small class="text-muted"> - @{{  user.username }}</small></h5>
+
+                {%  if user != app.user %}
+                    {% if user.getFollowers().contains(app.user) == false %}
+                        <a href="{{ path('following_follow', { 'id' : user.id }) }}" class="btn btn-outline-primary">Follow</a>
+                    {% else %}
+                        <a href="{{ path('following_unfollow', {'id' : user.id }) }}" class="btn btn-outline-danger">Unfollow</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card-group py-2">
+        <div class="card">
+            <div class="card-body">
+                <h5>Followers</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for follower in user.getFollowers() %}
+                    <li class="list-group-item">
+                        <a href="{{ path('micro_posts_posts_by_user', {'username': follower.getUsername() }) }}">@{{ follower.getUsername() }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5>Following</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for following in user.getFollowing() %}
+                    <li class="list-group-item">
+                        <a href="{{ path('micro_posts_posts_by_user', {'username': following.getUsername() }) }}">@{{ following.getUsername() }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+    {% for post in posts %}
+        <article >
+
+            {{ include ('micro_post/raw-post.html.twig', { 'post' : post }) }}
+
+
+            <footer class="d-block text-right mt-3">
+                {%  if ( is_granted('edit', post ))  %}
+                    <small>
+                        <a href="{{ path('micro_posts_edit', {'id' : post.id}) }}">Edit</a>
+                    </small>
+                {% endif %}
+
+                {%  if ( is_granted('delete', post ))  %}
+                    <small>
+                        <a href="{{ path('micro_posts_delete', {'id' : post.id}) }}">Delete</a>
+                    </small>
+                {% endif %}
+            </footer>
+        </article>
+    {% endfor %}
+{% endblock %}
