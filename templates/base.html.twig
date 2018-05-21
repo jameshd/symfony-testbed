@@ -8,25 +8,55 @@
         {% endblock %}
     </head>
     <body>
+        <nav class="navbar navbar-dark navbar-expand-md sticky-top bg-dark p-0">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0"
+               href="{{ path('micro_posts_index') }}">Micro Post App</a>
+            <div class="w-100 order-1 order-md-0">
+                <ul class="navbar-nav px-3">
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item text-nowrap">
+                            <a class="nav-link" href="{{ path('micro_posts_add') }}">Add new</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="order-2 order-md-1">
+                <ul class="navbar-nav px-3">
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item text-nowrap">
+                            <a class="nav-link"
+                               href="#">{{ app.user.getFullName() }}</a>
+                        </li>
+                        <li class="nav-item text-nowrap">
+                            <a class="nav-link"
+                               href="{{ logout_path('main') }}">Sign out</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item text-nowrap">
+                            <a class="nav-link"
+                               href="{{ path('security_login') }}">Sign in</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
         <main role="main" class="container">
             <div class="my-3 p-3 bg-white rounded box-shadow">
-                <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
-
-                {% block body %}
-                {% endblock %}
+                {% block body %} {% endblock %}
 
             </div>
 
-        {% block debug %}
+<!--         {% block debug %}
             <ul>
                 <li>Env: {{app.environment}}</li>
-                <li>User: {{ app.user}} </li>
+                <li>User: {{ app.user ? app.user.getUsername() : 'Anon' }} </li>
                 <li>Request: {{ app.request}}</li>
                 <li>Session: {{app.session.isStarted}}</li>
                 <li>Debug: {{app.debug}}</li>
             </ul>
 
-        {% endblock  %}
+        {% endblock  %} -->
 
         {% block javascripts %}
             <script src="/build/js/app.js" type="text/javascript" charset="utf-8" async defer></script>

@@ -3,17 +3,32 @@
 {% block title %}Micro Posts!!{% endblock %}
 
 {% block body %}
-    <small class="d-block text-right mt-3">
-        <a href="{{ path('micro_posts_add') }}">Add New</a>
-    </small>
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success">{{ message }} </div>
+    {% endfor %}
+
+    <h6 class="border-bottom border-gray pb-2 mb-0">Recent Updates</h6>
+
 
     {% for post in posts %}
-        <div class="media text-muted pt-3">
-            <img data-src="holder.js/32x32?text=MJ&bg=e83e8c&fg=fff&size=8" alt="" class="mr-2 rounded">
-            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                <span class="d-block"><strong class="text-gray-dark">@username</strong> <small>{{post.time|date('F jS Y')}}</small></span>
-                {{post.text}}
-            </p>
-        </div>
+    <article >
+
+        {{ include ('micro_post/raw-post.html.twig', { 'post' : post }) }}
+
+
+        <footer class="d-block text-right mt-3">
+            {%  if ( is_granted('edit', post ))  %}
+            <small>
+                <a href="{{ path('micro_posts_edit', {'id' : post.id}) }}">Edit</a>
+            </small>
+            {% endif %}
+
+            {%  if ( is_granted('delete', post ))  %}
+            <small>
+                <a href="{{ path('micro_posts_delete', {'id' : post.id}) }}">Delete</a>
+            </small>
+            {% endif %}
+        </footer>
+    </article>
     {% endfor %}
 {% endblock %}
