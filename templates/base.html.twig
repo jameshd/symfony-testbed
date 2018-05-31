@@ -5,6 +5,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" type="text/css" href="/build/css/app.css">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" crossorigin="anonymous">
         {% endblock %}
     </head>
     <body>
@@ -24,6 +25,15 @@
             <div class="order-2 order-md-1">
                 <ul class="navbar-nav px-3">
                     {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item text-nowrap border-right border-secondary">
+                            <a href="{{ path('notification_all') }}" class="nav-link">
+                                Notifications
+                                <span class="badge badge-light" id="notification-count">
+                                    <i class="fa fa-circle fa-circle-o-notch fa-spin"></i>
+                                </span>
+                            </a>
+                        </li>
+
                         <li class="nav-item text-nowrap">
                             <a class="nav-link"
                                href="#">{{ app.user.getFullName() }}</a>
@@ -60,6 +70,21 @@
 
         {% block javascripts %}
             <script src="/build/js/app.js" type="text/javascript" charset="utf-8" async defer></script>
+                {% if is_granted('ROLE_USER') %}
+                <script>
+                    function fetchNotifcationCount() {
+                        fetch('{{ path('notification_unread_count') }}', {'credentials' : 'include'})
+                            .then((response) => response.json())
+                            .then(json => {
+                                document.getElementById('notification-count').innerText = json.count;
+                                setTimeout(fetchNotifcationCount, 5000);
+                            })
+                            .catch(reason => console.log(reason));
+                    }
+
+                    fetchNotifcationCount();
+                </script>
+            {% endif %}
         {% endblock %}
     </body>
 </html>

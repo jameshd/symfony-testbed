@@ -9,7 +9,7 @@
             <div class="card-body">
                 <h5>{{ user.fullName }}<small class="text-muted"> - @{{  user.username }}</small></h5>
 
-                {%  if user != app.user %}
+                {%  if is_granted('ROLE_USER') and user.getId() != app.user.getId() %}
                     {% if user.getFollowers().contains(app.user) == false %}
                         <a href="{{ path('following_follow', { 'id' : user.id }) }}" class="btn btn-outline-primary">Follow</a>
                     {% else %}

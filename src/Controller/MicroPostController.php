@@ -6,7 +6,9 @@ use App\Entity\MicroPost;
 use App\Form\MicroPostType;
 use App\Entity\User;
 use App\Repository\MicroPostRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping as Embedded;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -77,6 +79,15 @@ class MicroPostController
         return $this->flashMessages;
     }
 
+    /**
+     * MicroPostController constructor.
+     * @param TwigEnv $twig
+     * @param MicroPostRepository $repo
+     * @param FormFactoryInterface $formFactory
+     * @param EntityManagerInterface $em
+     * @param RouterInterface $router
+     * @param FlashBagInterface $flashMessages
+     */
     public function __construct(
         TwigEnv $twig, MicroPostRepository $repo, FormFactoryInterface $formFactory, EntityManagerInterface $em,
         RouterInterface $router,
@@ -90,15 +101,33 @@ class MicroPostController
         $this->router = $router;
         $this->flashMessages = $flashMessages;
     }
+
     /**
      * @Route("/", name="index")
+     * @param TokenStorageInterface $tokenStorage
+     * @param UserRepository $repository
+     * @return Response
      */
-    public function index()
+    public function index(TokenStorageInterface $tokenStorage, UserRepository $repository)
     {
-        $html = $this->twig->render('micro_post/index.html.twig', [
-            'posts' => $this->getRepository()->findBy([], [
+
+        $currentUser = $tokenStorage->getToken()->getUser();
+        $usersToFollow = [];
+
+        if ($currentUser instanceof User) {
+            $posts = $this->repository->findAllByUsers($currentUser->getFollowing());
+
+            $usersToFollow = count($posts) === 0 ? $repository->findAllWithMoreThanFivePostsExceptUser($currentUser) : [];
+
+        } else {
+            $posts = $this->getRepository()->findBy([], [
                 'time' => "DESC",
-            ]),
+            ]);
+        }
+
+        $html = $this->twig->render('micro_post/index.html.twig', [
+            'posts' => $posts,
+            'usersToFollow' => $usersToFollow
         ]);
 
         return new Response($html);
