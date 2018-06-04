@@ -1,0 +1,13 @@
+'Sign in': 'Se connecter'
+'Sign out': Déconnexion
+Notifications: Notifications
+'Add new': 'Ajouter une nouvelle'
+'Recent updates': 'Mises à jour récentes'
+'I agree to the terms of service': 'J''accepte les conditions d''utilisation'
+Username: 'Nom d''utilisateur'
+Password: 'Mot de passe'
+'Repated password': 'Mot de passé'
+'Full name': 'Nom et prénom'
+Register: 'Créer un compte'
+'You have not notifications': 'Vous n''avez pas de notifications'
+email.registration: "<h3>Bienvenue dans l'application!</h3>\n<p>Bonjour %name%! Vous êtes inscrit dans l'application!</p>\n<p>Veuillez confirmer le compte en cliquant sur ce lien\n<a href=\"%confirm-link%\">lien</a>.\n</p>\n<p>Pour vous connecter, accédez à <a href=\"%login-link%\">page de connexion</a>.</p>\n<p>Merci!</p>"

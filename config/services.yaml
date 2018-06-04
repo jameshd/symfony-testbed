@@ -1,8 +1,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: 'en'
+    locale: 'fr'
     hello_message: "Blimey!"
+    email_from: "%env(MAILER_FROM)%"
 
 services:
     # default configuration for services in *this* file
@@ -24,6 +25,10 @@ services:
     App\Twig\AppExtension:
         arguments:
             $locale: '%locale%'
+
+    App\Mailer\Mailer:
+        arguments:
+            $mailFrom: '%email_from%'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class

@@ -9,10 +9,25 @@
 namespace App\Event;
 
 
+use App\Mailer\Mailer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var Mailer
+     */
+    protected $mailer;
+
+    /**
+     * UserSubscriber constructor.
+     * @param Mailer $mailer
+     */
+    public function __construct(Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -41,6 +56,6 @@ class UserSubscriber implements EventSubscriberInterface
 
     public function onUserRegister(UserRegisterEvent $event)
     {
-        $user = $event->getRegisteredUser();
+        return $this->mailer->sendConfirmationEmail($event->getRegisteredUser());
     }
 }

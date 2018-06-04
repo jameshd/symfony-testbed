@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{%  block body %}
+    {%  if user %}
+        <h3>Congratulations!</h3>
+        <p>Your account is confirmed</p>
+
+        <a href="{{ path('security_login') }}">You can now login</a>
+    {% else %}
+        <p>something went wrong!</p>
+    {% endif %}
+{% endblock %}
